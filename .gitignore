@@ -1,0 +1,22 @@
+.DS_Store
+*.pyc
+/report.*.json
+/venv
+/build
+/eth/build
+node_modules/
+jsconfig.json
+.vscode
+psql.sh
+yarn-error.log
+.nyc_output/
+coverage/
+*.sw*
+.env
+
+# Database downloads
+latest.dump
+latest.dump.*
+
+# Webpack profiling
+stats.json
