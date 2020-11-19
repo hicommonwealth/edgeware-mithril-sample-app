@@ -18,11 +18,12 @@ class Account {
 
 class Store {
   selectedAccount: Account;
+  selectedAccountSigner;
   activeAccounts: Account[];
   walletInitialized: boolean;
 
   apiInitialized: boolean;
-  api;
+  api: any;
   apiConnectionStatus: string = 'disconnected';
   latestBlocktime: number;
 
@@ -53,8 +54,9 @@ class Store {
       provider.on('error', () => this.updateApiConnectionStatus('error'));
       return provider;
     };
+    const provider = await createApiProvider('ws://mainnet1.edgewa.re:9944');
     this.api = await ApiPromise.create({
-      provider: await createApiProvider('ws://mainnet1.edgewa.re:9944'),
+      provider,
       types: Mainnet.types,
       typesAlias: Mainnet.typesAlias,
     });
@@ -72,16 +74,17 @@ class Store {
     });
   }
 
-  setSelectedAccount = (address: string) => {
+  setSelectedAccount = (address: string, signer) => {
     const account = this.activeAccounts.find((a) => a.address === address);
     if (!account) return;
     this.selectedAccount = account;
+    this.selectedAccountSigner = signer;
 
     localStorage.setItem('lastSelectedAccount', address);
     m.redraw();
   }
 
-  loadAccounts = async () => {
+  initializeAccounts = async () => {
     // request polkadot-js authentication
     if (!isWeb3Injected) {
       alert('No web3 wallet injected!');
@@ -94,13 +97,15 @@ class Store {
 
     const lastSelectedAddress = localStorage.getItem('lastSelectedAccount');
     const lastSelectedAccount = lastSelectedAddress && this.activeAccounts.find((a) => a.address === lastSelectedAddress);
-    if (lastSelectedAccount) this.setSelectedAccount(lastSelectedAccount.address);
+    if (lastSelectedAccount) {
+      const injector = await web3FromAddress(lastSelectedAccount.address);
+      this.setSelectedAccount(lastSelectedAccount.address, injector.signer);
+    }
     m.redraw();
   };
 
   constructor() {
     this.activeAccounts = [];
-    this.initializeAPI(); // TODO: should the API be loaded after a wallet is connected?
   }
 }
 

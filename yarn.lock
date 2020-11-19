@@ -865,6 +865,18 @@
   resolved "https://registry.yarnpkg.com/@emotion/unitless/-/unitless-0.7.5.tgz#77211291c1900a700b8a78cfafda3160d76949ed"
   integrity sha512-OWORNpfjMsSSUBVrRBVGECkhWcULOAJz9ZW8uK9qgxD+87M7jHRcvh/A96XXNhXTLmKcoYSQtBEX7lHMO7YRwg==
 
+"@polkadot/api-contract@^2.7.1":
+  version "2.7.1"
+  resolved "https://registry.yarnpkg.com/@polkadot/api-contract/-/api-contract-2.7.1.tgz#63913317c3b527c7bbd6eee8347ad4fcd305236d"
+  integrity sha512-xR9r4YX5b+3um8Pat6BNRtPP+aGU3M0qPylIdmAjS0IJjXV9u23kEXDiK9R0qwiBwYM5uq6Es+5qDXW2pWRAZQ==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    "@polkadot/api" "2.7.1"
+    "@polkadot/types" "2.7.1"
+    "@polkadot/util" "^4.1.1"
+    bn.js "^5.1.3"
+    rxjs "^6.6.3"
+
 "@polkadot/api-derive@2.7.1":
   version "2.7.1"
   resolved "https://registry.yarnpkg.com/@polkadot/api-derive/-/api-derive-2.7.1.tgz#d4927e2e9579074466da8613953fd460b1f33466"

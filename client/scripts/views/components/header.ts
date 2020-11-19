@@ -21,6 +21,7 @@ const Header: m.Component<{ store }, {}> = {
           ? m(PopoverMenu, {
             hasArrow: false,
             transitionDuration: 0,
+            closeOnContentClick: true,
             trigger: m(Button, {
               label: store.selectedAccount
                 ? (store.selectedAccount.address.slice(0, 6) + '...')
@@ -48,8 +49,11 @@ const Header: m.Component<{ store }, {}> = {
             style: 'float: right;',
             label: 'Connect to a wallet',
             size: 'sm',
-            onclick: () => store.loadAccounts(),
-            oncreate: () => store.loadAccounts(),
+            // onclick: () => store.initializeAccounts(),
+            oncreate: () => {
+              store.initializeAccounts();
+              store.initializeAPI();
+            }
           }),
       ]),
     ]);

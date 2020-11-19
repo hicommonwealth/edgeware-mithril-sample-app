@@ -19,8 +19,8 @@ $(() => {
   const store = new Store();
 
   m.route(document.body, '/', {
-    '/':      { view: (vnode) => m(Layout, { store }, m(IndexPage)) },
-    '/about': { view: (vnode) => m(Layout, { store }, m(AboutPage)) },
+    '/':      { view: (vnode) => m(Layout, { store }, m(IndexPage, { store })) },
+    '/about': { view: (vnode) => m(Layout, { store }, m(AboutPage, { store })) },
   });
 
   // initialize construct-ui focus manager

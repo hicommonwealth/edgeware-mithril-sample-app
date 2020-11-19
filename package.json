@@ -18,6 +18,7 @@
     "@babel/register": "^7.12.1",
     "@edgeware/node-types": "^3.0.10",
     "@polkadot/api": "^2.7.1",
+    "@polkadot/api-contract": "^2.7.1",
     "@polkadot/extension-dapp": "^0.34.1",
     "@polkadot/keyring": "^4.1.1",
     "@polkadot/ui-identicon": "^0.41.1",
