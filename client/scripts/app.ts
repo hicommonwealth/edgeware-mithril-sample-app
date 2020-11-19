@@ -6,67 +6,36 @@ import $ from 'jquery';
 import { FocusManager } from 'construct-ui';
 import moment from 'moment-twitter';
 
-// set up route navigation and back-button handling
-const updateRouteTempStore = { lastNavigatedBack: undefined, lastNavigatedFrom: undefined };
-m.route.prefix = '';
-const _updateRoute = m.route.set;
-export const updateRoute = (...args) => {
-  updateRouteTempStore.lastNavigatedBack = false;
-  updateRouteTempStore.lastNavigatedFrom = m.route.get();
-  if (args[0] !== m.route.get()) _updateRoute.apply(this, args);
-};
-m.route.set = (...args) => {
-  // set app params that maintain global state for:
-  // - whether the user last clicked the back button
-  // - the last page the user was on
-  updateRouteTempStore.lastNavigatedBack = false;
-  updateRouteTempStore.lastNavigatedFrom = m.route.get();
-  // update route
-  if (args[0] !== m.route.get()) _updateRoute.apply(this, args);
-  // reset scroll position
-  const html = document.getElementsByTagName('html')[0];
-  if (html) html.scrollTo(0, 0);
-  const body = document.getElementsByTagName('body')[0];
-  if (body) body.scrollTo(0, 0);
-};
-const _onpopstate = window.onpopstate;
-window.onpopstate = (...args) => {
-  updateRouteTempStore.lastNavigatedBack = true;
-  updateRouteTempStore.lastNavigatedFrom = m.route.get();
-  if (_onpopstate) _onpopstate.apply(this, args);
-};
+import Store from './store';
+import setupMithrilRouteNavigation from './route_nav';
+import Layout from 'views/layout';
+import IndexPage from 'views/pages/index';
+import AboutPage from 'views/pages/about';
 
-// set up ontouchmove blocker
-document.ontouchmove = (event) => {
-  event.preventDefault();
-};
+// set up mithril route navigation
+setupMithrilRouteNavigation();
 
 $(() => {
-  // // set window error handler
+  const store = new Store();
+
+  m.route(document.body, '/', {
+    '/':      { view: (vnode) => m(Layout, { store }, m(IndexPage)) },
+    '/about': { view: (vnode) => m(Layout, { store }, m(AboutPage)) },
+  });
+
+  // initialize construct-ui focus manager
+  FocusManager.showFocusOnlyOnTab();
+
+  // initialize window error handler
   // window.onerror = (errorMsg, url, lineNumber, colNumber, error) => {
   //   notifyError(`${errorMsg}`);
   //   return false;
   // };
 
-  m.route(document.body, '/', {
-    '/': {
-      view: (vnode) => {
-        return m('', [
-          m('a', {
-            onclick: () => m.route.set('/about'),
-          }, 'go to about')
-        ]);
-      }
-    },
-    '/about': {
-      view: (vnode) => {
-        return m('', 'about');
-      }
-    }
-  });
-
-  // initialize construct-ui focus manager
-  FocusManager.showFocusOnlyOnTab();
+  // initialize other window behaviors
+  document.ontouchmove = (event) => {
+    event.preventDefault();
+  };
 });
 
 // /////////////////////////////////////////////////////////
